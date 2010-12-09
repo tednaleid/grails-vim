@@ -16,7 +16,7 @@ setlocal foldmethod=marker foldmarker={,}
 
 " Set foldlevel to 1, which folds up to the top-level methods/actions of
 " a Groovy class.
-setlocal foldlevel=1
+setlocal foldlevel=2
 
 " Avoid showing a bunch of dashes and the number of lines folded:
 setlocal fillchars=fold:\  foldtext=getline(v:foldstart)

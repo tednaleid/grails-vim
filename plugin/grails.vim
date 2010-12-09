@@ -57,7 +57,7 @@ function! s:GrailsDisplayViews()
     if finddir(viewsPath) != ""
         exe "Explore " . viewsPath
     else
-        echo "Sorry, " . viewsPath . " is not found, you idiot."
+        echo "Sorry, " . viewsPath . " is not found."
     endif
 endfunction
 
@@ -200,7 +200,7 @@ function! s:GrailsOpenItem(thisItem, ...)
         exe "e " . filePath
         return 1
     else
-        echo "Sorry, " . a:thisItem . " is not found, you idiot."
+        echo "Sorry, " . a:thisItem . " is not found."
         return 0
     endif
 endfunction
@@ -227,6 +227,7 @@ function s:GrailsReadTestOutput()
     let old_efm = &efm
     " format is file:lineNumber:message
     set efm=%f:%l:%m
+    echo "running " + s:parseScript
     cexpr system(s:parseScript)
     botright copen
 

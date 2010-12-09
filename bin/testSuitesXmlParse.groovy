@@ -1,14 +1,4 @@
 #!/usr/bin/env groovy
-def ts = new XmlParser().parse(new File('target/test-reports/TESTS-TestSuites.xml'))
-
-// Process two things: failures and errors
-ts.testsuite.testcase.failure.each { failure ->
-    processProblem(failure)
-}
-
-ts.testsuite.testcase.error.each { err ->
-    processProblem(err)
-}
 
 // errors and failures are both structured similarly in
 // the xml report.  Generalize both as a 'problem'
@@ -42,4 +32,20 @@ def processProblem(problem) {
         }
     }
     println "${fullPath}:${msg}"
+}
+
+def testSuiteFile = new File('target/test-reports/TESTS-TestSuites.xml')
+
+if (testSuiteFile.exists()){
+    def ts = new XmlParser().parse(testSuiteFile)
+
+    // Process two things: failures and errors
+
+    ts.testsuite.testcase.failure.each { failure ->
+        processProblem(failure)
+    }
+
+    ts.testsuite.testcase.error.each { err ->
+        processProblem(err)
+    }
 }
