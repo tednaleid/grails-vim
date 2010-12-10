@@ -1,5 +1,6 @@
 #!/usr/bin/env groovy
 
+
 // errors and failures are both structured similarly in
 // the xml report.  Generalize both as a 'problem'
 def processProblem(problem) {
@@ -35,6 +36,7 @@ def processProblem(problem) {
 }
 
 def testSuiteFile = new File('target/test-reports/TESTS-TestSuites.xml')
+def failedTestCount = 0
 
 if (testSuiteFile.exists()){
     def ts = new XmlParser().parse(testSuiteFile)
@@ -42,10 +44,15 @@ if (testSuiteFile.exists()){
     // Process two things: failures and errors
 
     ts.testsuite.testcase.failure.each { failure ->
+        failedTestCount++
         processProblem(failure)
     }
 
     ts.testsuite.testcase.error.each { err ->
+        failedTestCount++
         processProblem(err)
     }
 }
+// used by vim to determine whether to display the quickfix buffer, 0 means no failed tests
+System.exit(failedTestCount)
+

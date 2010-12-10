@@ -218,21 +218,33 @@ function! grails#GrailsControllerMarks(silent)
     exe "silent g/def\ update\\>/ma\ u"
     exe "normal 'z"
     if !a:silent
-        echo "Marks have been set for this controller, meow"
+        echo "Marks have been set for this controller"
     endif
 endfunction
 
 function s:GrailsReadTestOutput()
 
-    let old_efm = &efm
-    " format is file:lineNumber:message
-    set efm=%f:%l:%m
-    echo "running " + s:parseScript
-    cexpr system(s:parseScript)
-    botright copen
-
-    let &efm = old_efm
+    let result = system(s:parseScript)
+    let failureCount = v:shell_error
+    if failureCount != 0
+        let old_efm = &efm
+        " format is file:lineNumber:message
+        set efm=%f:%l:%m
+        cexpr system(s:parseScript)
+        botright copen
+        let &efm = old_efm
+    else
+        call s:GreenBar()
+    endif
 endfunction
+
+function! s:GreenBar()
+    hi GreenBar ctermfg=black ctermbg=green guibg=green guifg=black
+    echohl GreenBar
+    echon "All Tests Passed!               "
+    echohl
+endfunction
+
 
 "}}}1
 " Define Commands{{{1
