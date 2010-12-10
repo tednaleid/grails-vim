@@ -230,7 +230,7 @@ function s:GrailsReadTestOutput()
         let old_efm = &efm
         " format is file:lineNumber:message
         set efm=%f:%l:%m
-        cexpr system(s:parseScript)
+        cexpr result
         botright copen
         let &efm = old_efm
     else
@@ -243,6 +243,13 @@ function! s:GreenBar()
     echohl GreenBar
     echon "All Tests Passed!               "
     echohl
+endfunction
+
+let g:grails_test_app = 'grails test-app'
+
+function! s:GrailsRunTests()
+    let result = system(g:grails_test_app)
+    call s:GrailsReadTestOutput()
 endfunction
 
 
@@ -277,6 +284,9 @@ noremap <SID>GrailsControllerMarks :call grails#GrailsControllerMarks()<CR>
 
 noremap <unique> <script> <Plug>GrailsDisplayUrlMappings <SID>GrailsDisplayUrlMappings
 noremap <SID>GrailsDisplayUrlMappings :call <SID>GrailsOpenItem("UrlMappings.groovy")<CR>
+
+noremap <unique> <script> <Plug>GrailsRunTests <SID>GrailsRunTests
+noremap <SID>GrailsRunTests :call <SID>GrailsRunTests()<CR>
 " }}}1
 
 let s:parseScript=findfile('bin/testSuitesXmlParse.groovy', &rtp) 
@@ -309,6 +319,7 @@ call <SID>GrailsMap("t", "<Plug>GrailsDisplayTests")
 call <SID>GrailsMap("u", "<Plug>GrailsDisplayUrlMappings")
 call <SID>GrailsMap("v", "<Plug>GrailsDisplayViews")
 call <SID>GrailsMap("x", "<Plug>GrailsDisplayTestXml")
+call <SID>GrailsMap("a", "<Plug>GrailsRunTests")
 
 " }}}1
 " vim: set fdm=marker:
