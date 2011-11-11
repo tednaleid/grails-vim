@@ -28,6 +28,15 @@ setlocal fillchars=fold:\  foldtext=getline(v:foldstart)
 "    zm  : fold (m)ore
 "    zr  : (r)educe folding
 "    See :h folding for more options
-
 " Set tabstop = 4 (convention for groovy files)
 setlocal tabstop=4
+
+" Run groovy script with F5
+if mapcheck("<F5>") == ""
+    map <unique> <F5> :w<bar>:!groovy %<CR>
+    imap <unique> <F5> <C-O>:w<bar>:!groovy %<CR>
+endif
+
+map <S-F5> :w<bar>:r! groovy %<CR>
+imap <S-F5> <C-O>:w<bar>:r! groovy %<CR>
+
